@@ -49,7 +49,7 @@ import sys
 import locale
 import re
 
-import pinyin
+import pinyin_comp as pinyin
 
 DOUBLE_WIDTH = {
                     "～" : "~" ,
