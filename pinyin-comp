@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 """
 complete path by acronym of pinyin initials
@@ -51,40 +51,37 @@ import re
 
 import pinyin
 
-_, default_encoding = locale.getdefaultlocale()
-
-
 DOUBLE_WIDTH = {
-                    u"～" : u"~" ,
-                    u"！" : u"!" ,
-                    u"＠" : u"@" ,
-                    u"＃" : u"#" ,
-                    u"＄" : u"$" ,
-                    u"％" : u"%" ,
-                    u"＆" : u"&" ,
-                    u"＊" : u"*" ,
-                    u"（" : u"(" ,
-                    u"）" : u")" ,
-                    u"＿" : u"_" ,
-                    u"－" : u"-" ,
-                    u"＋" : u"+" ,
-                    u"［" : u"[" ,
-                    u"］" : u"]" ,
-                    u"＜" : u"<" ,
-                    u"＞" : u">" ,
-                    u"？" : u"?" ,
-                    u"，" : u"," ,
-                    u"。" : u"." ,
-                    u"／" : u"/" ,
-                    u"、" : "u"  ,
+                    "～" : "~" ,
+                    "！" : "!" ,
+                    "＠" : "@" ,
+                    "＃" : "#" ,
+                    "＄" : "$" ,
+                    "％" : "%" ,
+                    "＆" : "&" ,
+                    "＊" : "*" ,
+                    "（" : "(" ,
+                    "）" : ")" ,
+                    "＿" : "_" ,
+                    "－" : "-" ,
+                    "＋" : "+" ,
+                    "［" : "[" ,
+                    "］" : "]" ,
+                    "＜" : "<" ,
+                    "＞" : ">" ,
+                    "？" : "?" ,
+                    "，" : "," ,
+                    "。" : "." ,
+                    "／" : "/" ,
+                    "、" : "u"  ,
                 }
 
 # fuzzy pinyin
 FUZZY = {}
 try:
     FUZZY = eval( os.getenv("FUZZY") )
-    FUZZY.keys()
-except StandardError:
+    list(FUZZY.keys())
+except Exception:
     FUZZY = {}
 
 def transform_double_width(uni_char):
@@ -116,48 +113,27 @@ def acronymize(uni_char):
     uni_char = transform_double_width(uni_char)
 
     # if ascii, return immediately
-    if uni_char <  u"\x80" :
+    if uni_char <  "\x80" :
         return uni_char
 
     pinyin_initial = get_pinyin_initials(uni_char)
 
     # special case for chars having polyphone
     if len(pinyin_initial) > 1:
-        return u"`%s`" % pinyin_initial
+        return "`%s`" % pinyin_initial
 
     # for most cases.
     return fuzzynize( pinyin_initial )
 
 def get_acronym(text):
     "get acronym for text string"
-    text = unicodelize(text)
-
-    acronym = u""
+    acronym = ""
 
     for char in text:
         acronym += acronymize(char)
 
     return acronym
 
-def unicodelize(text):
-    "try to convert string into unicode string."
-    if not isinstance(text, unicode):
-        try:
-            return unicode(text, default_encoding)
-        except UnicodeDecodeError:
-            pass
-
-    return text
-
-def stringlize(text):
-    "try to convert unicode string back into string"
-    if isinstance(text, unicode):
-        try:
-            return text.encode(default_encoding)
-        except UnicodeEncodeError:
-            pass
-
-    return text
 
 def expand_leading_tilda(path):
     "expand leading ~/ or ~user/"
@@ -176,7 +152,6 @@ if __name__ == '__main__':
 
     path = sys.argv[2].replace("\\","")
     path = expand_leading_tilda(path)
-    path = unicodelize(path)
     # support fuzzy pinyin
     path = "".join( [ fuzzynize(x) for x in path] )
 
@@ -193,7 +168,7 @@ if __name__ == '__main__':
     effective_basename = os.path.basename(effective_path)
 
     if not dirname :
-        dirname = u"./"
+        dirname = "./"
 
     # get all top-level subentries(non-recursive)
     try:
@@ -250,19 +225,18 @@ if __name__ == '__main__':
 
     try:
         locale.setlocale(locale.LC_ALL, "")
-    except StandardError:
+    except Exception:
         pass
 
     # when dealing with outer world, always use native encoding
-    reply = [ stringlize(x) for x in reply]
     reply.sort( key=locale.strxfrm )
 
     if index :
         try:
-            print (escape_string(reply[index - 1]))
+            print((escape_string(reply[index - 1])))
         except IndexError:
             # return the last candidate when index is out of range
             pass
     else:
         for candicate in reply:
-            print escape_string(candicate)
+            print(escape_string(candicate))
