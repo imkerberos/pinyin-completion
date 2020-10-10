@@ -40,6 +40,12 @@ For Zsh users, source `shell/pinyin-comp.zsh` in your `~/.zshrc`
 
 ### Others
 
+For fuzzy pinyin support, define environment variable "FUZZY". For example:
+
+	export FUZZY="{ 'n':'l' }"
+	export FUZZY="{ 'n':'l','f':'p' }"
+
+
 `tools/table-generator.py` is used to generate `pinyin_initial.py`, based upon the contents of `tools/unicode-han-pinyin.txt`.
 
 If you feel the default pinyin_initial.py is too big, which cause sensible delay and un-wanted ambigurous, just use you favourite editor to modify `tools/unicode-han-pinyin.txt`, then regenerate `pinyin_initial.py` by running:
