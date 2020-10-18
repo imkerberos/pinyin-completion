@@ -48,6 +48,7 @@ import os
 import sys
 import locale
 import re
+from ast import literal_eval
 
 import pinyin_comp as pinyin
 
@@ -79,7 +80,7 @@ DOUBLE_WIDTH = {
 # fuzzy pinyin
 FUZZY = {}
 try:
-    FUZZY = eval( os.getenv("FUZZY") )
+    FUZZY = literal_eval( os.getenv("FUZZY") )
     list(FUZZY.keys())
 except Exception:
     FUZZY = {}
