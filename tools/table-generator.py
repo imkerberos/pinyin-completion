@@ -27,6 +27,25 @@ if __name__ == "__main__":
         except KeyError:
             pinyin_initial[unichar] = [initial,]
 
+        if accent[0:2] == 'zh' :
+            initial = 'v'
+            try :
+                pinyin_initial[unichar].append(initial)
+            except KeyError:
+                pinyin_initial[unichar] = [initial,]
+        elif accent[0:2] == 'ch' :
+            initial = 'i'
+            try :
+                pinyin_initial[unichar].append(initial)
+            except KeyError:
+                pinyin_initial[unichar] = [initial,]
+        elif accent[0:2] == 'sh' :
+            initial = 'u'
+            try :
+                pinyin_initial[unichar].append(initial)
+            except KeyError:
+                pinyin_initial[unichar] = [initial,]
+
     # remove duplication
     for key in list(pinyin.keys()):
         pinyin[key] = list( set(pinyin[key] ) )
