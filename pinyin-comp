@@ -49,6 +49,7 @@ import sys
 import locale
 import re
 from ast import literal_eval
+from pypinyin import pinyin, lazy_pinyin, Style
 
 import pinyin_comp as pinyin
 
@@ -233,13 +234,8 @@ if __name__ == "__main__":
 
             reply.append(candicate)
 
-    try:
-        locale.setlocale(locale.LC_ALL, "zh_CN.UTF-8")
-    except Exception:
-        pass
-
     # when dealing with outer world, always use native encoding
-    reply.sort(key=locale.strxfrm)
+    reply.sort(key=lazy_pinyin)
 
     if index:
         try:
